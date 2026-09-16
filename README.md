@@ -12,6 +12,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Bahasa](https://img.shields.io/badge/bahasa-Indonesia-red.svg)](#)
 
+**[🚀 Buka demo langsung →](https://antono4.github.io/GalaxyQuest/)**
+
 [Tentang](#-tentang) · [Tangkapan Layar](#-tangkapan-layar) · [Fitur](#-fitur) · [Menjalankan](#-menjalankan-proyek) · [Lisensi](#-lisensi)
 
 </div>
@@ -113,7 +115,7 @@ pengaturan pendampingan.
 ### Tampilan Seluler
 
 <div align="center">
-  <img src="docs/screenshots/09-mobile.png" alt="Tampilan Galaxy Quest pada layar ponsel" width="140">
+  <img src="docs/screenshots/09-mobile.png" alt="Tampilan Galaxy Quest pada layar ponsel" width="320">
 </div>
 
 Sepenuhnya responsif — tata letak menyesuaikan dari ponsel hingga layar lebar.
@@ -152,7 +154,7 @@ Sepenuhnya responsif — tata letak menyesuaikan dari ponsel hingga layar lebar.
   dipindahkan ke tombol tutup saat modal dibuka dan *scroll* halaman dikunci.
 - Tautan **"Lewati ke konten utama"** untuk pengguna keyboard dan pembaca layar.
 - Setiap elemen interaktif memiliki `aria-label`, indikator fokus yang terlihat, dan
-  kontras teks minimal 7,9:1.
+  kontras teks terukur minimal **7,5:1** — di atas ambang WCAG AA (4,5:1).
 - Animasi otomatis dinonaktifkan saat pengguna mengaktifkan `prefers-reduced-motion`.
 
 ---
@@ -249,14 +251,20 @@ utama), `sun` (hadiah & CTA), `aqua` (sains), `coral` (kartun), `mint` (status a
 
 ```js
 colors: {
-  ink:   { 950: '#04050e', 900: '#090b18', 800: '#141830' }, // latar & kartu
-  brand: { 400: '#818cf8', 500: '#6366f1', 700: '#4338ca' }, // aksi utama
+  ink:   { 950: '#04050e', 900: '#090b18', 850: '#0e1123',
+           800: '#141830', 750: '#1a1f3d', 700: '#232850' }, // latar & kartu
+  brand: { 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1',
+           600: '#4f46e5', 700: '#4338ca' },                 // aksi utama
   sun:   { 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b' }, // bintang & tombol utama
-  aqua:  { 400: '#22d3ee', 500: '#06b6d4' },                 // eksperimen sains
-  coral: { 400: '#fb7185', 500: '#f43f5e' },                 // serial kartun
-  mint:  { 400: '#34d399', 500: '#10b981' },                 // status aman
+  aqua:  { 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4' }, // eksperimen sains
+  coral: { 300: '#fda4af', 400: '#fb7185', 500: '#f43f5e' }, // serial kartun
+  mint:  { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }, // status aman
 }
 ```
+
+Blok yang sama juga mendefinisikan token elevasi (`boxShadow`: `glow-sun`,
+`glow-brand`, `glow-aqua`, `glow-coral`, `glow-mint`, `panel`) dan dua keluarga font
+(`display` untuk judul, `body` untuk teks).
 
 Gaya komponen yang dipakai ulang (`.btn`, `.card`, `.chip`, `.nav-link`, `.icon-tile`,
 dan varian hover seperti `.hover-brand`) didefinisikan sekali di blok
@@ -270,8 +278,9 @@ penanganannya di objek `Games`:
 const Games = {
   launch(type) {
     if (type === 'math') this.startMathGame();
+    else if (type === 'alien') this.startMemoryGame();
     else if (type === 'planet') this.startPlanetBuilder();
-    // tambahkan tipe baru di sini
+    else if (type === 'racer') this.startSpaceRacer();
   }
 };
 ```
