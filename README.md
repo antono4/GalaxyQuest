@@ -21,8 +21,10 @@
 ## 🌌 Tentang
 
 **Galaxy Quest** mengubah rasa penasaran anak menjadi pengetahuan lewat petualangan
-antariksa. Seluruh antarmuka dirancang untuk anak usia sekolah dasar: warna cerah,
-maskot **Kapten Nova & Tim**, efek suara ceria, dan alur navigasi yang sederhana.
+antariksa. Antarmuka memakai estetika *deep-space console* yang tenang dan profesional —
+permukaan gelap berlapis, aksen emas untuk hadiah, serta ilustrasi vektor orisinal —
+dipadukan maskot **Kapten Nova & Tim**, efek suara lembut, dan alur navigasi sederhana
+yang tetap ramah anak.
 
 Proyek ini sengaja dibuat sebagai **satu file `index.html` tanpa build step** — cukup
 buka di browser, tanpa instalasi, tanpa database, dan tanpa backend.
@@ -35,15 +37,15 @@ buka di browser, tanpa instalasi, tanpa database, dan tanpa backend.
 
 ## 📸 Tangkapan Layar
 
-### Beranda — Hero & Kokpit Kapten Nova
+### Beranda — Hero & Konsol Misi Kapten Nova
 
 <div align="center">
   <img src="docs/screenshots/01-hero.png" alt="Beranda Galaxy Quest dengan hero section dan maskot Kapten Nova" width="100%">
 </div>
 
-Halaman pembuka menampilkan ajakan *"Meluncur Ke Dunia Belajar!"*, kokpit interaktif
-Kapten Nova, serta bar aksi cepat menuju **Main**, **Tonton**, **Sains**, **Misi**, dan
-**Koleksi**.
+Halaman pembuka menampilkan ajakan *"Belajar Sains Jadi Petualangan Galaksi"*, panel
+konsol misi dengan maskot Kapten Nova, strip metrik kepercayaan, serta bar aksi cepat
+menuju **Main**, **Tonton**, **Sains**, **Misi**, dan **Koleksi**.
 
 ### Game Mini Edukasi
 
@@ -138,8 +140,20 @@ Sepenuhnya responsif — tata letak menyesuaikan dari ponsel hingga layar lebar.
 
 - Seluruh suara dibangkitkan **di sisi klien** memakai `Tone.Synth` — tidak ada berkas audio.
 - Semua grafik dibuat dengan **SVG inline dan CSS gradien** — tidak ada berkas gambar eksternal.
-- Kartu bertema *glassmorphism* dengan animasi mengambang dan efek pendar.
-- Kontrol penting sudah memiliki `aria-label` dan `title`.
+- Kartu bertema *glassmorphism* dengan lift halus saat hover dan pendar warna per kategori.
+- Ilustrasi maskot dan avatar kru digambar sebagai **SVG vektor**, bukan emoji, agar
+  tampil konsisten di semua sistem operasi dan perangkat.
+
+### Aksesibilitas
+
+- Navigasi utama memakai **scroll-spy** yang menandai seksi aktif secara otomatis.
+- Menu seluler dengan tombol hamburger, `aria-expanded`, dan `aria-controls`.
+- Modal dapat ditutup lewat tombol **Escape**, klik latar, atau tombol tutup; fokus
+  dipindahkan ke tombol tutup saat modal dibuka dan *scroll* halaman dikunci.
+- Tautan **"Lewati ke konten utama"** untuk pengguna keyboard dan pembaca layar.
+- Setiap elemen interaktif memiliki `aria-label`, indikator fokus yang terlihat, dan
+  kontras teks minimal 7,9:1.
+- Animasi otomatis dinonaktifkan saat pengguna mengaktifkan `prefers-reduced-motion`.
 
 ---
 
@@ -149,7 +163,7 @@ Sepenuhnya responsif — tata letak menyesuaikan dari ponsel hingga layar lebar.
 | --- | --- |
 | Markup & gaya | HTML5 + [Tailwind CSS](https://tailwindcss.com) (CDN) + CSS kustom |
 | Ikon | [Font Awesome 6.4](https://fontawesome.com) |
-| Tipografi | [Google Fonts](https://fonts.google.com) — Fredoka & Plus Jakarta Sans |
+| Tipografi | [Google Fonts](https://fonts.google.com) — Outfit (display) & Plus Jakarta Sans (teks) |
 | Audio | [Tone.js 14.8](https://tonejs.github.io) |
 | Interaksi | Vanilla JavaScript (tanpa framework, tanpa bundler) |
 
@@ -229,20 +243,25 @@ GalaxyQuest/
 
 Semua penyesuaian dilakukan di dalam `index.html`.
 
-**Palet warna** — ubah di blok `tailwind.config`:
+**Palet warna** — design token didefinisikan di blok `tailwind.config`. Warna
+dikelompokkan per peran agar konsisten: `ink` (permukaan netral), `brand` (aksi
+utama), `sun` (hadiah & CTA), `aqua` (sains), `coral` (kartun), `mint` (status aman).
 
 ```js
 colors: {
-  space: {
-    deep:   '#040511',   // latar utama
-    card:   '#121436',   // permukaan kartu
-    accent: '#6c5ce7',   // aksen ungu
-    yellow: '#fbc531',   // bintang & tombol utama
-    pink:   '#e84393',
-    cyan:   '#00cec9',
-  }
+  ink:   { 950: '#04050e', 900: '#090b18', 800: '#141830' }, // latar & kartu
+  brand: { 400: '#818cf8', 500: '#6366f1', 700: '#4338ca' }, // aksi utama
+  sun:   { 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b' }, // bintang & tombol utama
+  aqua:  { 400: '#22d3ee', 500: '#06b6d4' },                 // eksperimen sains
+  coral: { 400: '#fb7185', 500: '#f43f5e' },                 // serial kartun
+  mint:  { 400: '#34d399', 500: '#10b981' },                 // status aman
 }
 ```
+
+Gaya komponen yang dipakai ulang (`.btn`, `.card`, `.chip`, `.nav-link`, `.icon-tile`,
+dan varian hover seperti `.hover-brand`) didefinisikan sekali di blok
+`<style type="text/tailwindcss">` dengan directive `@apply`, sehingga komponen baru
+otomatis mengikuti sistem desain yang sama.
 
 **Menambah game baru** — tambahkan kartu pada `<section id="games">`, lalu daftarkan
 penanganannya di objek `Games`:
