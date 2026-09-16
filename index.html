@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" class="Galaxy Quest - Platform Belajar Interaktif Luar Angkasa untuk Anak">
+    <title>Galaxy Quest - Jelajahi & Belajar Luar Angkasa!</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tone.js (Interactive Audio Synthesis) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Fredoka', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        space: {
+                            deep: '#040511',
+                            card: '#121436',
+                            cardHover: '#1a1d4a',
+                            accent: '#6c5ce7',
+                            yellow: '#fbc531',
+                            pink: '#e84393',
+                            cyan: '#00cec9',
+                            emerald: '#10b981'
+                        }
+                    },
+                    boxShadow: {
+                        'glow-yellow': '0 0 25px rgba(251, 197, 49, 0.45)',
+                        'glow-cyan': '0 0 25px rgba(0, 206, 201, 0.45)',
+                        'glow-pink': '0 0 25px rgba(232, 67, 147, 0.45)',
+                        'glow-purple': '0 0 25px rgba(108, 92, 231, 0.45)',
+                        'card': '0 15px 35px -5px rgba(0, 0, 0, 0.6)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #040511;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+        .glass-card {
+            background: rgba(18, 20, 54, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .glass-card-hover {
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .glass-card-hover:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(108, 92, 231, 0.35);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #040511;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #23275c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6c5ce7;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1.2deg); }
+        }
+        .animate-float {
+            animation: float 5.5s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.06); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 3.5s ease-in-out infinite;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #fbc531 0%, #ff7675 50%, #e84393 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative selection:bg-yellow-400 selection:text-black">
+
+    <!-- Latar Belakang Kanvas Bintang Interaktif -->
+    <canvas id="starfield" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- WRAPPER UTAMA -->
+    <div class="relative z-10 flex flex-col min-h-screen">
+
+        <!-- HEADER / NAVIGASI -->
+        <header class="sticky top-0 z-50 backdrop-blur-xl bg-[#040511]/85 border-b border-white/10 px-4 lg:px-8 py-3 transition-all duration-300">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                
+                <!-- Logo Utama -->
+                <a href="#home" class="flex items-center gap-3 group" onclick="SoundEngine.play('C5')" aria-label="Galaxy Quest Home">
+                    <div class="relative w-11 h-11 rounded-full bg-gradient-to-tr from-indigo-600 via-purple-500 to-yellow-400 p-[2px] shadow-lg shadow-purple-500/30 group-hover:scale-105 transition-transform">
+                        <div class="w-full h-full bg-[#040511] rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-rocket text-yellow-400 text-xl transform -rotate-45 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-heading font-bold text-white tracking-wide block leading-none">Galaxy</span>
+                        <span class="text-2xl font-heading font-bold text-yellow-400 tracking-wide block leading-none">Quest</span>
+                    </div>
+                </a>
+
+                <!-- Navigasi Desktop -->
+                <nav class="hidden md:flex items-center gap-1 lg:gap-2 bg-space-card/80 p-1.5 rounded-full border border-white/10" aria-label="Navigasi Utama">
+                    <a href="#home" onclick="SoundEngine.play('E5')" class="nav-link flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-indigo-600 text-white shadow-md transition-all">
+                        <i class="fa-solid fa-house"></i> Beranda
+                    </a>
+                    <a href="#games" onclick="SoundEngine.play('G5')" class="nav-link flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-gamepad"></i> Game
+                    </a>
+                    <a href="#cartoons" onclick="SoundEngine.play('A5')" class="nav-link flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-circle-play"></i> Kartun
+                    </a>
+                    <a href="#activities" onclick="SoundEngine.play('B5')" class="nav-link flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-flask"></i> Sains
+                    </a>
+                    <a href="#challenges" onclick="SoundEngine.play('C6')" class="nav-link flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-trophy text-yellow-400"></i> Tantangan
+                    </a>
+                    <a href="#parents" onclick="SoundEngine.play('D6')" class="nav-link flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-user-shield text-cyan-400"></i> Orang Tua
+                    </a>
+                </nav>
+
+                <!-- Aksi Kanan Header -->
+                <div class="flex items-center gap-2.5">
+                    <!-- Toggle Suara -->
+                    <button id="soundToggleBtn" onclick="SoundEngine.toggle()" class="w-10 h-10 rounded-full bg-space-card border border-white/10 hover:border-yellow-400 flex items-center justify-center text-gray-300 hover:text-yellow-400 transition-all" title="Aktif/Nonaktifkan Suara" aria-label="Toggle Suara">
+                        <i id="soundIcon" class="fa-solid fa-volume-high text-yellow-400"></i>
+                    </button>
+                    <!-- Tombol Cari -->
+                    <button id="searchBtn" onclick="Modals.openSearch()" class="w-10 h-10 rounded-full bg-space-card border border-white/10 hover:border-yellow-400 flex items-center justify-center text-gray-300 hover:text-yellow-400 transition-all" title="Cari Konten" aria-label="Cari">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    <!-- Display Poin Bintang -->
+                    <button onclick="Modals.openRewards()" class="hidden sm:flex items-center gap-1.5 bg-space-card border border-yellow-400/30 px-3.5 py-1.5 rounded-full text-xs font-bold text-yellow-400 hover:border-yellow-400 transition-all" title="Bintang Kamu">
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <span id="headerStars">1,480</span>
+                    </button>
+                    <!-- Tombol Masuk -->
+                    <button onclick="Modals.openLogin()" class="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-heading font-bold px-5 py-2.5 rounded-full shadow-glow-yellow transition-all transform hover:scale-105 active:scale-95">
+                        <i class="fa-solid fa-user"></i> Masuk
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-grow">
+
+            <!-- BAGIAN HERO -->
+            <section id="home" class="relative pt-8 pb-16 px-4 lg:px-8 overflow-hidden">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Konten Kiri Hero -->
+                    <div class="lg:col-span-6 space-y-6 text-center lg:text-left z-10">
+                        <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 text-sm font-semibold">
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 animate-ping"></span>
+                            <i class="fa-solid fa-sparkles text-yellow-400"></i> Musim Petualangan Luar Angkasa Baru!
+                        </div>
+
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-heading font-extrabold text-white leading-none tracking-wide drop-shadow-xl">
+                            Meluncur Ke <br>
+                            <span class="gradient-text">Dunia Belajar!</span>
+                        </h1>
+
+                        <p class="text-lg text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                            Jelajahi galaksi yang penuh dengan game edukasi seru, serial kartun animasi menarik, dan eksperimen sains interaktif yang mengubah rasa penasaran menjadi pengetahuan!
+                        </p>
+
+                        <!-- Tombol CTA -->
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                            <button onclick="Navigation.scrollTo('games'); SoundEngine.play('G5');" class="flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-amber-400 hover:from-yellow-300 hover:to-amber-300 text-slate-950 text-lg font-heading font-bold px-8 py-4 rounded-full shadow-glow-yellow hover:shadow-yellow-400/80 transition-all transform hover:-translate-y-1 active:translate-y-0">
+                                Mulai Misi Kamu
+                                <i class="fa-solid fa-rocket text-xl"></i>
+                            </button>
+                            <button onclick="Modals.openTrailer(); SoundEngine.play('E5');" class="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-lg font-heading font-semibold px-6 py-4 rounded-full backdrop-blur-md transition-all transform hover:-translate-y-1">
+                                <div class="w-7 h-7 rounded-full bg-pink-500 flex items-center justify-center text-xs shadow-glow-pink">
+                                    <i class="fa-solid fa-play text-white ml-0.5"></i>
+                                </div>
+                                Tonton Trailer
+                            </button>
+                        </div>
+
+                        <!-- Bukti Sosial / Kepercayaan -->
+                        <div class="pt-4 flex items-center justify-center lg:justify-start gap-3">
+                            <div class="flex -space-x-3">
+                                <div class="w-10 h-10 rounded-full border-2 border-indigo-900 bg-gradient-to-tr from-yellow-400 to-amber-500 flex items-center justify-center text-base shadow-md">👧</div>
+                                <div class="w-10 h-10 rounded-full border-2 border-indigo-900 bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-base shadow-md">👦</div>
+                                <div class="w-10 h-10 rounded-full border-2 border-indigo-900 bg-gradient-to-tr from-pink-400 to-purple-500 flex items-center justify-center text-base shadow-md">🧒</div>
+                            </div>
+                            <div class="text-sm font-semibold text-slate-300">
+                                <span class="text-yellow-400 font-bold">Dipercaya 1 Juta+</span> Anak & Pendidik di Seluruh Dunia
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Kanan Hero (Pod Kokpit Luar Angkasa) -->
+                    <div class="lg:col-span-6 relative flex justify-center">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full filter blur-3xl opacity-70 animate-pulse-glow"></div>
+
+                        <div class="relative w-full max-w-lg aspect-square rounded-[3rem] bg-gradient-to-b from-indigo-900/80 via-space-card to-purple-950/90 p-4 border-2 border-indigo-500/40 shadow-card animate-float overflow-hidden group">
+                            <!-- Jendela Layar Kokpit -->
+                            <div class="relative w-full h-full rounded-[2.5rem] overflow-hidden bg-gradient-to-b from-[#0b0328] via-[#160d3d] to-[#1b104c] flex flex-col items-center justify-center p-6 text-center border border-indigo-400/20">
+                                
+                                <div class="absolute inset-0 opacity-70">
+                                    <svg class="w-full h-full" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="80" cy="100" r="2.5" fill="#fff" opacity="0.8"/>
+                                        <circle cx="280" cy="80" r="3.5" fill="#fbc531" opacity="0.9"/>
+                                        <circle cx="340" cy="300" r="2" fill="#fff" opacity="0.6"/>
+                                        <circle cx="120" cy="320" r="3" fill="#00cec9" opacity="0.7"/>
+                                        <circle cx="200" cy="200" r="140" fill="none" stroke="rgba(0,206,201,0.15)" stroke-width="1.5" stroke-dasharray="6,6"/>
+                                        <line x1="40" y1="200" x2="360" y2="200" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                                        <line x1="200" y1="40" x2="200" y2="360" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                                    </svg>
+                                </div>
+
+                                <!-- Status Co-Pilot AI -->
+                                <div class="absolute top-4 right-6 bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 text-xs px-3 py-1 rounded-full flex items-center gap-1.5 backdrop-blur-md">
+                                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                                    <i class="fa-solid fa-robot"></i> Co-Pilot AI Aktif
+                                </div>
+
+                                <!-- Karakter Kapten Nova -->
+                                <div class="relative z-10 my-auto flex flex-col items-center">
+                                    <div class="w-36 h-36 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-indigo-500 p-1 shadow-glow-yellow mb-4 relative animate-bounce" style="animation-duration: 4s;">
+                                        <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center overflow-hidden relative">
+                                            <svg class="w-28 h-28 text-yellow-300" viewBox="0 0 100 100" fill="currentColor">
+                                                <circle cx="50" cy="40" r="30" fill="#fbc531" />
+                                                <rect x="25" y="30" width="50" height="25" rx="12" fill="#0f172a" />
+                                                <circle cx="40" cy="42" r="4" fill="#00cec9" />
+                                                <circle cx="60" cy="42" r="4" fill="#00cec9" />
+                                                <path d="M42 48 Q50 54 58 48" stroke="#fff" stroke-width="2" fill="none"/>
+                                                <path d="M30 70 C30 60 70 60 70 70 L75 95 L25 95 Z" fill="#6c5ce7"/>
+                                            </svg>
+                                        </div>
+                                        <div class="absolute -bottom-2 -right-2 bg-pink-500 text-white rounded-full w-9 h-9 flex items-center justify-center text-sm font-bold border-2 border-slate-900 shadow-lg">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="text-2xl font-heading font-bold text-white">Kapten Nova & Tim</h3>
+                                    <p class="text-xs text-indigo-200 mt-1">Misi Saat Ini: #104 - Eksplorasi Nebula Matematika</p>
+                                    
+                                    <div class="mt-4 flex items-center gap-2 bg-indigo-950/90 px-4 py-2 rounded-xl border border-indigo-500/40 text-xs text-yellow-300 font-mono shadow-inner">
+                                        <i class="fa-solid fa-signal text-emerald-400 animate-pulse"></i> Sinyal 100% | Jaringan Galaksi Online
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- BAR AKSI CEPAT -->
+            <section class="max-w-7xl mx-auto px-4 lg:px-8 w-full -mt-4 mb-12 relative z-20">
+                <div class="glass-card rounded-2xl p-4 shadow-card grid grid-cols-2 md:grid-cols-5 gap-3 border border-white/10">
+                    <button onclick="Navigation.scrollTo('games'); SoundEngine.play('C5');" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all text-left group">
+                        <div class="w-11 h-11 rounded-xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-gamepad text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-heading font-bold text-white">Main</div>
+                            <div class="text-xs text-slate-400">Game Seru</div>
+                        </div>
+                    </button>
+
+                    <button onclick="Navigation.scrollTo('cartoons'); SoundEngine.play('E5');" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all text-left group">
+                        <div class="w-11 h-11 rounded-xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-tv text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-heading font-bold text-white">Tonton</div>
+                            <div class="text-xs text-slate-400">Kartun Animasi</div>
+                        </div>
+                    </button>
+
+                    <button onclick="Navigation.scrollTo('activities'); SoundEngine.play('G5');" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all text-left group">
+                        <div class="w-11 h-11 rounded-xl bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-atom text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-heading font-bold text-white">Sains</div>
+                            <div class="text-xs text-slate-400">Eksperimen STEM</div>
+                        </div>
+                    </button>
+
+                    <button onclick="Navigation.scrollTo('challenges'); SoundEngine.play('A5');" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all text-left group">
+                        <div class="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-rocket text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-heading font-bold text-white">Misi</div>
+                            <div class="text-xs text-slate-400">Tantangan Mingguan</div>
+                        </div>
+                    </button>
+
+                    <button onclick="Modals.openRewards(); SoundEngine.play('C6');" class="col-span-2 md:col-span-1 flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-all text-left group">
+                        <div class="w-11 h-11 rounded-xl bg-yellow-500/20 border border-yellow-400/30 flex items-center justify-center text-yellow-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-award text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-heading font-bold text-white">Koleksi</div>
+                            <div class="text-xs text-slate-400">Hadiah Bintang</div>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- BAGIAN GAME MINI -->
+            <section id="games" class="py-12 px-4 lg:px-8 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                    <div>
+                        <span class="text-xs font-bold font-mono tracking-widest text-cyan-400 uppercase">Jelajahi Alam Semesta</span>
+                        <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mt-1">Game Mini Edukasi</h2>
+                        <p class="text-slate-300 text-sm mt-1">Permainan interaktif yang dirancang untuk melatih matematika, logika, dan kreativitas!</p>
+                    </div>
+                    <button onclick="Toast.show('Memuat katalog modul game...', 'fa-gamepad')" class="mt-4 md:mt-0 text-cyan-400 hover:text-cyan-300 font-heading font-bold text-sm flex items-center gap-2 group">
+                        Lihat Semua Game <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+
+                <!-- Grid Kartu Game -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                    <!-- Game 1: Misi Matematika -->
+                    <div onclick="Games.launch('math')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group flex flex-col h-full border border-purple-500/20">
+                        <div class="relative h-44 overflow-hidden flex items-center justify-center">
+                            <svg class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="mathBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#1a0b36"/>
+                                        <stop offset="100%" stop-color="#3b1566"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="400" height="225" fill="url(#mathBg)"/>
+                                <circle cx="50" cy="40" r="2" fill="#fbc531" opacity="0.8"/>
+                                <circle cx="350" cy="30" r="2.5" fill="#00cec9" opacity="0.9"/>
+                                <text x="40" y="85" fill="#fbc531" font-size="28" font-family="Fredoka, sans-serif" font-weight="bold" opacity="0.35">7 × 8</text>
+                                <text x="270" y="110" fill="#00cec9" font-size="30" font-family="Fredoka, sans-serif" font-weight="bold" opacity="0.35">+ = %</text>
+                                <g transform="translate(160, 35) rotate(25 40 60)">
+                                    <path d="M 30 110 L 40 160 L 50 110 Z" fill="#ff7675" opacity="0.9"/>
+                                    <path d="M 33 110 L 40 145 L 47 110 Z" fill="#fbc531"/>
+                                    <path d="M 40 10 Q 65 50 60 105 L 20 105 Q 15 50 40 10 Z" fill="#ffffff"/>
+                                    <circle cx="40" cy="50" r="12" fill="#0f172a" stroke="#00cec9" stroke-width="3"/>
+                                    <circle cx="40" cy="50" r="6" fill="#00cec9"/>
+                                </g>
+                            </svg>
+                            <div class="absolute top-3 left-3 bg-purple-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold text-yellow-400 border border-purple-500/30">
+                                Logika & Angka
+                            </div>
+                            <div class="absolute z-10 w-12 h-12 rounded-full bg-yellow-400 text-slate-900 flex items-center justify-center text-xl shadow-glow-yellow transform group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-calculator"></i>
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-heading font-bold text-white group-hover:text-yellow-400 transition-colors">Misi Matematika</h3>
+                                <p class="text-xs text-slate-300 mt-1 line-clamp-2">Selesaikan persamaan matematika untuk meluncurkan roket dan menghindari asteroid!</p>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-white/10">
+                                <span><i class="fa-solid fa-star text-yellow-400"></i> 4.9 (12.4k)</span>
+                                <span class="text-yellow-400 font-semibold flex items-center gap-1">Main Sekarang <i class="fa-solid fa-play text-[10px]"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game 2: Pembuat Planet -->
+                    <div onclick="Games.launch('planet')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group flex flex-col h-full border border-blue-500/20">
+                        <div class="relative h-44 overflow-hidden flex items-center justify-center">
+                            <svg class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="planetBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#061329"/>
+                                        <stop offset="100%" stop-color="#0d3b5c"/>
+                                    </linearGradient>
+                                    <radialGradient id="planetGrad" cx="30%" cy="30%" r="70%">
+                                        <stop offset="0%" stop-color="#00cec9"/>
+                                        <stop offset="60%" stop-color="#0984e3"/>
+                                        <stop offset="100%" stop-color="#1b1464"/>
+                                    </radialGradient>
+                                </defs>
+                                <rect width="400" height="225" fill="url(#planetBg)"/>
+                                <ellipse cx="200" cy="115" rx="130" ry="32" fill="none" stroke="#fbc531" stroke-width="8" opacity="0.3" transform="rotate(-15 200 115)"/>
+                                <circle cx="200" cy="115" r="55" fill="url(#planetGrad)"/>
+                                <path d="M 170 95 Q 185 80 205 90 Q 220 100 215 115 Q 190 120 170 95 Z" fill="#55efc4" opacity="0.6"/>
+                            </svg>
+                            <div class="absolute top-3 left-3 bg-blue-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold text-cyan-400 border border-blue-500/30">
+                                Kreativitas
+                            </div>
+                            <div class="absolute z-10 w-12 h-12 rounded-full bg-cyan-400 text-slate-900 flex items-center justify-center text-xl shadow-glow-cyan transform group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-earth-americas"></i>
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-heading font-bold text-white group-hover:text-cyan-400 transition-colors">Pembuat Planet</h3>
+                                <p class="text-xs text-slate-300 mt-1 line-clamp-2">Rancang dan hias planet alien dengan lautan menyala, gunung berapi, dan kehidupan unik!</p>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-white/10">
+                                <span><i class="fa-solid fa-star text-yellow-400"></i> 4.8 (8.9k)</span>
+                                <span class="text-cyan-400 font-semibold flex items-center gap-1">Main Sekarang <i class="fa-solid fa-play text-[10px]"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game 3: Mencocokkan Alien -->
+                    <div onclick="Games.launch('alien')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group flex flex-col h-full border border-emerald-500/20">
+                        <div class="relative h-44 overflow-hidden flex items-center justify-center">
+                            <svg class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="alienBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#022c22"/>
+                                        <stop offset="100%" stop-color="#064e3b"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="400" height="225" fill="url(#alienBg)"/>
+                                <g transform="translate(60, 50) rotate(-12)">
+                                    <rect width="45" height="60" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+                                    <text x="22" y="38" text-anchor="middle" font-size="22">👽</text>
+                                </g>
+                                <g transform="translate(295, 55) rotate(15)">
+                                    <rect width="45" height="60" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+                                    <text x="22" y="38" text-anchor="middle" font-size="22">👽</text>
+                                </g>
+                            </svg>
+                            <div class="absolute top-3 left-3 bg-emerald-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold text-emerald-400 border border-emerald-500/30">
+                                Daya Ingat
+                            </div>
+                            <div class="absolute z-10 w-12 h-12 rounded-full bg-emerald-400 text-slate-900 flex items-center justify-center text-xl shadow-md transform group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-heading font-bold text-white group-hover:text-emerald-400 transition-colors">Cari Pasangan Alien</h3>
+                                <p class="text-xs text-slate-300 mt-1 line-clamp-2">Latih ingatan daya ingat visual dengan menemukan pasangan kartu alien ramah!</p>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-white/10">
+                                <span><i class="fa-solid fa-star text-yellow-400"></i> 4.9 (15.1k)</span>
+                                <span class="text-emerald-400 font-semibold flex items-center gap-1">Main Sekarang <i class="fa-solid fa-play text-[10px]"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game 4: Balap Luar Angkasa -->
+                    <div onclick="Games.launch('racer')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group flex flex-col h-full border border-pink-500/20">
+                        <div class="relative h-44 overflow-hidden flex items-center justify-center">
+                            <svg class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="racerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#2a0826"/>
+                                        <stop offset="100%" stop-color="#6b114d"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="400" height="225" fill="url(#racerBg)"/>
+                                <path d="M 0 225 L 170 140 M 100 225 L 185 140 M 200 225 L 200 140 M 300 225 L 215 140 M 400 225 L 230 140" stroke="#f43f5e" stroke-width="1.5" opacity="0.3"/>
+                                <g transform="translate(130, 40)">
+                                    <path d="M 140 75 L 30 45 L 10 65 L 40 75 L 10 85 L 30 105 Z" fill="#e11d48"/>
+                                    <ellipse cx="80" cy="75" rx="20" ry="7" fill="#38bdf8"/>
+                                </g>
+                            </svg>
+                            <div class="absolute top-3 left-3 bg-rose-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold text-rose-400 border border-rose-500/30">
+                                Ketangkasan
+                            </div>
+                            <div class="absolute z-10 w-12 h-12 rounded-full bg-pink-500 text-white flex items-center justify-center text-xl shadow-glow-pink transform group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-shuttle-space"></i>
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-heading font-bold text-white group-hover:text-pink-400 transition-colors">Balap Luar Angkasa</h3>
+                                <p class="text-xs text-slate-300 mt-1 line-clamp-2">Kendalikan pesawat kosmik, hindari rintangan, dan kumpulkan kristal energi!</p>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-white/10">
+                                <span><i class="fa-solid fa-star text-yellow-400"></i> 4.7 (9.8k)</span>
+                                <span class="text-pink-400 font-semibold flex items-center gap-1">Main Sekarang <i class="fa-solid fa-play text-[10px]"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- BAGIAN KARTUN ANIMASI -->
+            <section id="cartoons" class="py-12 px-4 lg:px-8 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                    <div>
+                        <span class="text-xs font-bold font-mono tracking-widest text-pink-400 uppercase">Serial Animasi</span>
+                        <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mt-1">Tonton & Belajar</h2>
+                        <p class="text-slate-300 text-sm mt-1">Ikuti petualangan Nova, Ziggy, dan kawan-kawan menjelajahi rahasia sains!</p>
+                    </div>
+                    <button onclick="Toast.show('Memuat pustaka episode kartun...', 'fa-circle-play')" class="mt-4 md:mt-0 text-pink-400 hover:text-pink-300 font-heading font-bold text-sm flex items-center gap-2 group">
+                        Lihat Episode Lengkap <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+
+                <!-- Grid Video Kartun -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                    <!-- Episode 1 -->
+                    <div onclick="Modals.playCartoon('Bulan Yang Hilang', '12:45', 'Bantu Kapten Nova menemukan bulan misterius yang menyimpan kristal bercahaya!')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group border border-pink-500/20">
+                        <div class="relative h-48 bg-slate-900 overflow-hidden">
+                            <svg class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="225" fill="#0b0826"/>
+                                <circle cx="200" cy="112" r="70" fill="#fbc531" opacity="0.9"/>
+                                <circle cx="170" cy="90" r="14" fill="#f59e0b" opacity="0.4"/>
+                                <circle cx="220" cy="140" r="18" fill="#f59e0b" opacity="0.4"/>
+                            </svg>
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-pink-500 text-white flex items-center justify-center text-lg shadow-glow-pink transform group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-play ml-0.5"></i>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded text-xs font-mono text-white">
+                                12:45
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-heading font-bold text-lg text-white group-hover:text-pink-400 transition-colors">Bulan Yang Hilang</h3>
+                            <p class="text-xs text-slate-400 mt-1">Episode 1 • Musim 2</p>
+                        </div>
+                    </div>
+
+                    <!-- Episode 2 -->
+                    <div onclick="Modals.playCartoon('Penyelamatan Robot', '11:30', 'Ziggy terjebak dalam sabuk asteroid! Bisakah tim melakukan aksi penyelamatan?')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group border border-pink-500/20">
+                        <div class="relative h-48 bg-slate-900 overflow-hidden">
+                            <svg class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="225" fill="#09182b"/>
+                                <polygon points="200,10 240,225 160,225" fill="#00cec9" opacity="0.25"/>
+                                <rect x="170" y="70" width="60" height="50" rx="10" fill="#38bdf8"/>
+                                <circle cx="185" cy="88" r="7" fill="#0f172a"/>
+                                <circle cx="215" cy="88" r="7" fill="#0f172a"/>
+                            </svg>
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-pink-500 text-white flex items-center justify-center text-lg shadow-glow-pink transform group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-play ml-0.5"></i>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded text-xs font-mono text-white">
+                                11:30
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-heading font-bold text-lg text-white group-hover:text-pink-400 transition-colors">Penyelamatan Robot</h3>
+                            <p class="text-xs text-slate-400 mt-1">Episode 2 • Musim 2</p>
+                        </div>
+                    </div>
+
+                    <!-- Episode 3 -->
+                    <div onclick="Modals.playCartoon('Mengejar Komet', '13:02', 'Kejar komet itu! Pilot Comet mencoba memecahkan rekor kecepatan galaksi.')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group border border-pink-500/20">
+                        <div class="relative h-48 bg-slate-900 overflow-hidden">
+                            <svg class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="225" fill="#1d0a2b"/>
+                                <path d="M 350 30 Q 200 100 50 180" stroke="#fbc531" stroke-width="25" stroke-linecap="round" opacity="0.3"/>
+                                <path d="M 350 30 Q 200 100 50 180" stroke="#ff7675" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+                                <circle cx="350" cy="30" r="22" fill="#ffffff"/>
+                            </svg>
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-pink-500 text-white flex items-center justify-center text-lg shadow-glow-pink transform group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-play ml-0.5"></i>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded text-xs font-mono text-white">
+                                13:02
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-heading font-bold text-lg text-white group-hover:text-pink-400 transition-colors">Mengejar Komet</h3>
+                            <p class="text-xs text-slate-400 mt-1">Episode 3 • Musim 2</p>
+                        </div>
+                    </div>
+
+                    <!-- Episode 4 -->
+                    <div onclick="Modals.playCartoon('Misteri Planet Mars', '12:18', 'Temukan rahasia rawa es kuno dan gua bawah tanah Mars bersama Luna!')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group border border-pink-500/20">
+                        <div class="relative h-48 bg-slate-900 overflow-hidden">
+                            <svg class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="225" fill="#2b0a0a"/>
+                                <path d="M 0 225 Q 100 140 200 170 Q 300 200 400 130 L 400 225 Z" fill="#b91c1c"/>
+                                <circle cx="300" cy="70" r="45" fill="#ef4444" opacity="0.8"/>
+                            </svg>
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-pink-500 text-white flex items-center justify-center text-lg shadow-glow-pink transform group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-play ml-0.5"></i>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-3 right-3 bg-black/75 backdrop-blur-md px-2 py-0.5 rounded text-xs font-mono text-white">
+                                12:18
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-heading font-bold text-lg text-white group-hover:text-pink-400 transition-colors">Misteri Planet Mars</h3>
+                            <p class="text-xs text-slate-400 mt-1">Episode 4 • Musim 2</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- BAGIAN EKSPERIMEN SAINS STEM -->
+            <section id="activities" class="py-12 px-4 lg:px-8 max-w-7xl mx-auto w-full">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                    <div>
+                        <span class="text-xs font-bold font-mono tracking-widest text-yellow-400 uppercase">Sains Praktis STEM</span>
+                        <h2 class="text-3xl sm:text-4xl font-heading font-bold text-white mt-1">Eksperimen Rumah</h2>
+                        <p class="text-slate-300 text-sm mt-1">Eksperimen aman dan seru yang bisa dipraktikkan langsung di rumah bersama keluarga!</p>
+                    </div>
+                    <button onclick="Toast.show('Membuka panduan eksperimen...', 'fa-flask')" class="mt-4 md:mt-0 text-yellow-400 hover:text-yellow-300 font-heading font-bold text-sm flex items-center gap-2 group">
+                        Jelajahi Aktivitas <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+
+                <!-- Kartu Eksperimen Sains -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                    <!-- Aktivitas 1 -->
+                    <div onclick="Modals.openActivity('volcano')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group border border-yellow-500/20">
+                        <div class="relative h-44 overflow-hidden">
+                            <svg class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="225" fill="#1e1008"/>
+                                <polygon points="120,225 200,100 280,225" fill="#78350f"/>
+                                <circle cx="200" cy="65" r="12" fill="#ef4444"/>
+                                <circle cx="185" cy="45" r="8" fill="#fbc531"/>
+                                <circle cx="215" cy="40" r="10" fill="#f97316"/>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <div class="text-xs text-yellow-400 font-semibold mb-1">Reaksi Kimia Safe</div>
+                            <h3 class="font-heading font-bold text-lg text-white group-hover:text-yellow-400 transition-colors">Gunung Berapi Mini</h3>
+                            <p class="text-xs text-slate-300 mt-2">Reaksi soda kue dan cuka menciptakan erupsi buih warna-warni!</p>
+                        </div>
+                    </div>
+
+                    <!-- Aktivitas 2 -->
+                    <div onclick="Modals.openActivity('rainbow')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group border border-cyan-500/20">
+                        <div class="relative h-44 overflow-hidden">
+                            <svg class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="225" fill="#0c1829"/>
+                                <polygon points="170,160 200,80 230,160" fill="none" stroke="#67e8f9" stroke-width="4"/>
+                                <line x1="50" y1="130" x2="185" y2="120" stroke="#ffffff" stroke-width="5"/>
+                                <path d="M 215 120 L 350 70" stroke="#ef4444" stroke-width="3"/>
+                                <path d="M 215 122 L 350 85" stroke="#f97316" stroke-width="3"/>
+                                <path d="M 215 124 L 350 100" stroke="#eab308" stroke-width="3"/>
+                                <path d="M 215 126 L 350 115" stroke="#22c55e" stroke-width="3"/>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <div class="text-xs text-cyan-400 font-semibold mb-1">Optika & Fisika</div>
+                            <h3 class="font-heading font-bold text-lg text-white group-hover:text-cyan-400 transition-colors">Pelangi Dalam Kamar</h3>
+                            <p class="text-xs text-slate-300 mt-2">Gunakan prisma air dan pembiasan cahaya matahari.</p>
+                        </div>
+                    </div>
+
+                    <!-- Aktivitas 3 -->
+                    <div onclick="Modals.openActivity('solarsystem')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group border border-purple-500/20">
+                        <div class="relative h-44 overflow-hidden">
+                            <svg class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="225" fill="#0f0926"/>
+                                <circle cx="60" cy="112" r="40" fill="#fbc531"/>
+                                <ellipse cx="60" cy="112" rx="140" ry="70" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4"/>
+                                <circle cx="200" cy="112" r="14" fill="#38bdf8"/>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <div class="text-xs text-purple-400 font-semibold mb-1">Astronomi Kreatif</div>
+                            <h3 class="font-heading font-bold text-lg text-white group-hover:text-purple-400 transition-colors">Model Tata Surya</h3>
+                            <p class="text-xs text-slate-300 mt-2">Buat replika urutan planet dengan skala jarak sederhana.</p>
+                        </div>
+                    </div>
+
+                    <!-- Aktivitas 4 -->
+                    <div onclick="Modals.openActivity('crystal')" class="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer group border border-pink-500/20">
+                        <div class="relative h-44 overflow-hidden">
+                            <svg class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="225" fill="#250926"/>
+                                <polygon points="180,180 200,60 220,180" fill="#ec4899"/>
+                                <polygon points="140,180 160,90 185,180" fill="#a855f7"/>
+                                <polygon points="215,180 240,80 260,180" fill="#818cf8"/>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <div class="text-xs text-pink-400 font-semibold mb-1">Kristalografi</div>
+                            <h3 class="font-heading font-bold text-lg text-white group-hover:text-pink-400 transition-colors">Menumbuhkan Kristal</h3>
+                            <p class="text-xs text-slate-300 mt-2">Pelajari proses kristalisasi larutan garam mineral alami!</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- BAGIAN TIM KRU & TANTANGAN MINGGUAN -->
+            <section id="challenges" class="py-12 px-4 lg:px-8 max-w-7xl mx-auto w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Kotak Kiri: Kenali Tim Kru Luar Angkasa -->
+                    <div class="lg:col-span-7 glass-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between border border-purple-500/30">
+                        <div>
+                            <div class="text-xs font-mono font-bold text-purple-400 uppercase tracking-widest">Tim Penjelajah</div>
+                            <h2 class="text-3xl font-heading font-bold text-white mt-1 mb-6">Kenali Sahabat Luar Angkasa</h2>
+
+                            <!-- Grid Karakter -->
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                                
+                                <button onclick="Crew.showBio('Nova')" class="group flex flex-col items-center bg-white/5 hover:bg-white/15 p-3 rounded-2xl border border-white/10 hover:border-yellow-400 transition-all text-center">
+                                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-yellow-400 to-amber-500 p-0.5 mb-2 group-hover:scale-110 transition-transform">
+                                        <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-yellow-300 text-xl font-bold">
+                                            👩‍🚀
+                                        </div>
+                                    </div>
+                                    <span class="font-heading font-bold text-sm text-white block">Nova</span>
+                                    <span class="text-[10px] text-yellow-400 block">Kapten</span>
+                                </button>
+
+                                <button onclick="Crew.showBio('Ziggy')" class="group flex flex-col items-center bg-white/5 hover:bg-white/15 p-3 rounded-2xl border border-white/10 hover:border-cyan-400 transition-all text-center">
+                                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 p-0.5 mb-2 group-hover:scale-110 transition-transform">
+                                        <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-cyan-300 text-xl font-bold">
+                                            🤖
+                                        </div>
+                                    </div>
+                                    <span class="font-heading font-bold text-sm text-white block">Ziggy</span>
+                                    <span class="text-[10px] text-cyan-400 block">Robot AI</span>
+                                </button>
+
+                                <button onclick="Crew.showBio('Luna')" class="group flex flex-col items-center bg-white/5 hover:bg-white/15 p-3 rounded-2xl border border-white/10 hover:border-purple-400 transition-all text-center">
+                                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-400 to-pink-500 p-0.5 mb-2 group-hover:scale-110 transition-transform">
+                                        <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-purple-300 text-xl font-bold">
+                                            👩‍🔬
+                                        </div>
+                                    </div>
+                                    <span class="font-heading font-bold text-sm text-white block">Luna</span>
+                                    <span class="text-[10px] text-purple-400 block">Ilmuwan</span>
+                                </button>
+
+                                <button onclick="Crew.showBio('Orbit')" class="group flex flex-col items-center bg-white/5 hover:bg-white/15 p-3 rounded-2xl border border-white/10 hover:border-emerald-400 transition-all text-center">
+                                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-500 p-0.5 mb-2 group-hover:scale-110 transition-transform">
+                                        <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-emerald-300 text-xl font-bold">
+                                            👽
+                                        </div>
+                                    </div>
+                                    <span class="font-heading font-bold text-sm text-white block">Orbit</span>
+                                    <span class="text-[10px] text-emerald-400 block">Alien Ramah</span>
+                                </button>
+
+                                <button onclick="Crew.showBio('Comet')" class="col-span-2 sm:col-span-1 group flex flex-col items-center bg-white/5 hover:bg-white/15 p-3 rounded-2xl border border-white/10 hover:border-rose-400 transition-all text-center">
+                                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-rose-400 to-red-500 p-0.5 mb-2 group-hover:scale-110 transition-transform">
+                                        <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-rose-300 text-xl font-bold">
+                                            👨‍✈️
+                                        </div>
+                                    </div>
+                                    <span class="font-heading font-bold text-sm text-white block">Comet</span>
+                                    <span class="text-[10px] text-rose-400 block">Pilot Rekor</span>
+                                </button>
+
+                            </div>
+                        </div>
+
+                        <div id="crewQuote" class="mt-6 p-4 rounded-xl bg-purple-950/40 border border-purple-500/30 text-xs text-slate-300 flex items-center justify-between">
+                            <span>💡 <strong class="text-white">Tips:</strong> Klik karakter penjelajah di atas untuk mendengarkan kutipan misinya!</span>
+                        </div>
+                    </div>
+
+                    <!-- Kotak Kanan: Tantangan Mingguan -->
+                    <div class="lg:col-span-5 bg-gradient-to-br from-indigo-900 via-space-card to-purple-950 rounded-3xl p-6 sm:p-8 border border-yellow-400/30 flex flex-col justify-between relative overflow-hidden shadow-card">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-yellow-400/10 rounded-full filter blur-2xl"></div>
+
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-yellow-400 uppercase tracking-widest">Event Mingguan</span>
+                                <span class="bg-yellow-400/20 border border-yellow-400/40 text-yellow-300 text-[10px] px-2.5 py-1 rounded-full font-bold">Sisa 3 Hari</span>
+                            </div>
+
+                            <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white mt-3">Ikuti Misi Mingguan!</h2>
+                            <p class="text-sm text-slate-300 mt-2">
+                                Selesaikan tugas harian, kumpulkan lencana langka, dan naikkan peringkat di Papan Skor Penjelajah Cilik!
+                            </p>
+
+                            <!-- Progress Bar Misi -->
+                            <div class="mt-6 bg-slate-900/80 p-4 rounded-2xl border border-white/10 space-y-3">
+                                <div class="flex justify-between text-xs font-semibold">
+                                    <span class="text-slate-300"><i class="fa-solid fa-trophy text-yellow-400 mr-1"></i> Target Misi Mingguan</span>
+                                    <span class="text-yellow-400 font-bold" id="challengeGoalText">2 / 3 Selesai</span>
+                                </div>
+                                <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden p-0.5">
+                                    <div id="challengeProgressBar" class="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500" style="width: 66%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 flex items-center justify-between">
+                            <button onclick="Modals.openChallenges(); SoundEngine.play('G5');" class="bg-gradient-to-r from-yellow-400 to-amber-400 hover:from-yellow-300 hover:to-amber-300 text-slate-950 font-heading font-bold px-6 py-3 rounded-full shadow-glow-yellow transition-all transform hover:scale-105 active:scale-95">
+                                Cek Daftar Misi
+                            </button>
+                            <div class="w-12 h-12 rounded-2xl bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center text-yellow-400 text-2xl">
+                                🏆
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ZONA ORANG TUA -->
+            <section id="parents" class="py-12 px-4 lg:px-8 max-w-7xl mx-auto w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                    <!-- Kartu Portal Orang Tua -->
+                    <div class="lg:col-span-7 glass-card rounded-3xl p-6 sm:p-8 border border-cyan-500/30 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">Portal Orang Tua & Pendidik</span>
+                            <h2 class="text-3xl font-heading font-bold text-white mt-1">Lingkungan Belajar Aman & Terpercaya</h2>
+
+                            <ul class="mt-6 space-y-3.5 text-sm text-slate-200">
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs shrink-0">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <span class="font-semibold">100% Bebas Iklan, Aman Untuk Anak & Standar COPPA</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs shrink-0">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <span class="font-semibold">Materi Terintegrasi Kurikulum Kurikulum STEM & Matematika</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs shrink-0">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <span class="font-semibold">Fitur Pembatasan Durasi Layar (Screen Time) & Laporan Perkembangan</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-8">
+                            <button onclick="Modals.openParentsPanel(); SoundEngine.play('E5');" class="text-cyan-400 hover:text-cyan-300 font-heading font-bold text-sm flex items-center gap-2 group">
+                                Kelola Pengaturan Orang Tua <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Kartu Testimonial -->
+                    <div class="lg:col-span-5 glass-card rounded-3xl p-6 sm:p-8 border border-white/10 flex flex-col justify-between relative">
+                        <div class="text-yellow-400 text-4xl opacity-40 font-serif mb-2">“</div>
+                        <p class="text-slate-200 text-sm leading-relaxed italic relative z-10">
+                            Galaxy Quest membuat anak-anak saya sangat antusias belajar setiap hari! Eksperimen sains rumahan jadi aktivitas favorit keluarga kami setiap akhir pekan.
+                        </p>
+
+                        <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 to-pink-500 p-0.5">
+                                    <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-lg">👩‍👧</div>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-heading font-bold text-white">Siti Rahma</div>
+                                    <div class="text-xs text-slate-400">Ibu dari 2 Anak</div>
+                                </div>
+                            </div>
+                            <div class="text-yellow-400 text-xs space-x-0.5">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- BANNER PROMO UNDUH APLIKASI -->
+            <section class="py-8 px-4 lg:px-8 max-w-7xl mx-auto w-full">
+                <div class="bg-gradient-to-r from-indigo-950 via-purple-900 to-indigo-950 rounded-3xl p-6 sm:p-10 border border-indigo-500/30 flex flex-col md:flex-row items-center justify-between gap-6 shadow-card">
+                    <div class="flex items-center gap-5 text-center md:text-left">
+                        <div class="w-16 h-16 rounded-2xl bg-indigo-600/30 border border-indigo-400/40 flex items-center justify-center text-yellow-400 text-3xl shrink-0 hidden sm:flex shadow-glow-yellow">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-heading font-bold text-white">Bawa Petualangan Ke Mana Saja!</h2>
+                            <p class="text-sm text-slate-300 mt-1">Unduh aplikasi seluler Galaxy Quest dan nikmati mode belajar tanpa internet (offline).</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <button onclick="App.download('ios')" class="flex items-center gap-3 bg-black hover:bg-slate-900 text-white px-5 py-3 rounded-xl border border-white/20 transition-transform transform hover:scale-105 active:scale-95">
+                            <i class="fa-brands fa-apple text-2xl"></i>
+                            <div class="text-left leading-tight">
+                                <div class="text-[10px] text-slate-400 uppercase">Unduh di</div>
+                                <div class="text-sm font-bold">App Store</div>
+                            </div>
+                        </button>
+                        <button onclick="App.download('android')" class="flex items-center gap-3 bg-black hover:bg-slate-900 text-white px-5 py-3 rounded-xl border border-white/20 transition-transform transform hover:scale-105 active:scale-95">
+                            <i class="fa-brands fa-google-play text-2xl text-emerald-400"></i>
+                            <div class="text-left leading-tight">
+                                <div class="text-[10px] text-slate-400 uppercase">TEMUKAN DI</div>
+                                <div class="text-sm font-bold">Google Play</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER / TATA LETAK BAWAH -->
+        <footer class="mt-auto bg-[#03040c] border-t border-white/10 pt-12 pb-8 px-4 lg:px-8 text-slate-400 text-sm">
+            <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+                <!-- Info Brand -->
+                <div class="col-span-2 space-y-3">
+                    <a href="#home" class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-yellow-400 flex items-center justify-center text-slate-950 font-bold shadow-glow-yellow">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <span class="text-xl font-heading font-bold text-white">Galaxy Quest</span>
+                    </a>
+                    <p class="text-xs text-slate-400 max-w-sm leading-relaxed">
+                        Memberdayakan imajinasi generasi muda melalui pembelajaran berbasis gim eksplorasi luar angkasa, eksperimen sains kreatif, dan cerita edukatif.
+                    </p>
+                </div>
+
+                <!-- Kolom Navigasi 1 -->
+                <div>
+                    <h4 class="font-heading font-bold text-white text-base mb-3">Eksplorasi</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#home" class="hover:text-yellow-400 transition-colors">Beranda</a></li>
+                        <li><a href="#games" class="hover:text-yellow-400 transition-colors">Game Mini</a></li>
+                        <li><a href="#cartoons" class="hover:text-yellow-400 transition-colors">Serial Kartun</a></li>
+                        <li><a href="#activities" class="hover:text-yellow-400 transition-colors">Eksperimen STEM</a></li>
+                    </ul>
+                </div>
+
+                <!-- Kolom Navigasi 2 -->
+                <div>
+                    <h4 class="font-heading font-bold text-white text-base mb-3">Prestasi</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#challenges" class="hover:text-yellow-400 transition-colors">Misi Mingguan</a></li>
+                        <li><a href="#" onclick="Modals.openRewards()" class="hover:text-yellow-400 transition-colors">Lencana Bintang</a></li>
+                        <li><a href="#" onclick="Modals.openRewards()" class="hover:text-yellow-400 transition-colors">Papan Skor</a></li>
+                        <li><a href="#" onclick="Modals.openRewards()" class="hover:text-yellow-400 transition-colors">Tukar Hadiah</a></li>
+                    </ul>
+                </div>
+
+                <!-- Kolom Navigasi 3 -->
+                <div>
+                    <h4 class="font-heading font-bold text-white text-base mb-3">Orang Tua</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#parents" class="hover:text-yellow-400 transition-colors">Panduan Keamanan</a></li>
+                        <li><a href="#parents" class="hover:text-yellow-400 transition-colors">Standar Kurikulum</a></li>
+                        <li><a href="#" onclick="Toast.show('Pusat FAQ dibuka', 'fa-circle-question')" class="hover:text-yellow-400 transition-colors">Pertanyaan Umum</a></li>
+                        <li><a href="#" onclick="Toast.show('Bantuan Dukungan Pelanggan', 'fa-envelope')" class="hover:text-yellow-400 transition-colors">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs gap-4">
+                <p>&copy; 2026 Galaxy Quest Learning Inc. Hak Cipta Dilindungi Undang-Undang.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:underline">Kebijakan Privasi</a>
+                    <a href="#" class="hover:underline">Syarat Ketentuan</a>
+                    <a href="#" class="hover:underline">Pengaturan Cookie</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ELEMEN TOAST NOTIFIKASI -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-glow-yellow border border-yellow-400/50 transform translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-3 pointer-events-none">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-yellow-400 text-lg"></i>
+        <span id="toastMsg" class="font-bold text-sm">Aksi berhasil!</span>
+    </div>
+
+    <!-- WADAH MODAL GENETIK -->
+    <div id="modalOverlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div id="modalContent" class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 relative border border-white/20 shadow-card animate-float" style="animation-duration: 8s;">
+            <!-- Tombol Tutup Modal -->
+            <button onclick="Modals.close()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors" aria-label="Tutup Modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modalBody">
+                <!-- Konten Dinamis Diinjeksikan Lewat JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT KODE APLIKASI -->
+    <script>
+        /**
+         * STATE GLOBAL APLIKASI
+         */
+        const AppState = {
+            stars: 1480,
+            soundEnabled: true,
+            challengeProgress: 2,
+            totalChallenges: 3,
+            currentMathAns: 56,
+            memoryGameState: null
+        };
+
+        /**
+         * ENGINE SUARA TONE.JS
+         */
+        const SoundEngine = {
+            synth: null,
+            init() {
+                if (!this.synth && window.Tone) {
+                    try {
+                        this.synth = new Tone.Synth({
+                            oscillator: { type: "triangle" },
+                            envelope: { attack: 0.01, decay: 0.1, sustain: 0.1, release: 0.3 }
+                        }).toDestination();
+                    } catch (e) {
+                        console.log("Web Audio tidak diizinkan tanpa interaksi awal.");
+                    }
+                }
+            },
+            play(freq) {
+                if (!AppState.soundEnabled) return;
+                this.init();
+                try {
+                    if (window.Tone && Tone.context.state !== 'running') {
+                        Tone.start();
+                    }
+                    if (this.synth) {
+                        this.synth.triggerAttackRelease(freq, "8n");
+                    }
+                } catch (e) {
+                    // Suppress audio error
+                }
+            },
+            toggle() {
+                AppState.soundEnabled = !AppState.soundEnabled;
+                const icon = document.getElementById('soundIcon');
+                if (AppState.soundEnabled) {
+                    icon.className = 'fa-solid fa-volume-high text-yellow-400';
+                    Toast.show('Efek Suara Diaktifkan 🔊', 'fa-volume-high');
+                } else {
+                    icon.className = 'fa-solid fa-volume-xmark text-slate-500';
+                    Toast.show('Efek Suara Diberhentikan 🔇', 'fa-volume-xmark');
+                }
+            }
+        };
+
+        /**
+         * NOTIFIKASI TOAST
+         */
+        const Toast = {
+            show(msg, icon = 'fa-circle-check') {
+                const toast = document.getElementById('toast');
+                const toastMsg = document.getElementById('toastMsg');
+                const toastIcon = document.getElementById('toastIcon');
+
+                toastMsg.innerText = msg;
+                toastIcon.className = `fa-solid ${icon} text-yellow-400 text-lg`;
+
+                toast.classList.remove('translate-y-24', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-24', 'opacity-0');
+                }, 3200);
+            }
+        };
+
+        /**
+         * NAVIGASI
+         */
+        const Navigation = {
+            scrollTo(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        };
+
+        /**
+         * SISTEM MODAL & GAME INTERAKTIF
+         */
+        const Modals = {
+            overlay: document.getElementById('modalOverlay'),
+            body: document.getElementById('modalBody'),
+
+            open(html) {
+                this.body.innerHTML = html;
+                this.overlay.classList.remove('hidden');
+            },
+            close() {
+                this.overlay.classList.add('hidden');
+            },
+            playCartoon(title, duration, desc) {
+                SoundEngine.play('E5');
+                this.open(`
+                    <div class="space-y-4">
+                        <div class="relative w-full aspect-video rounded-2xl bg-black border border-pink-500/40 overflow-hidden flex flex-col items-center justify-center shadow-glow-pink">
+                            <div class="text-center p-4">
+                                <i class="fa-solid fa-film text-pink-500 text-5xl animate-bounce mb-3"></i>
+                                <div class="text-base font-bold text-white">Pemutaran Episode Animasi</div>
+                                <div class="text-xs text-pink-300 mt-1">${title} • (${duration})</div>
+                            </div>
+                            <div class="absolute bottom-3 left-3 right-3 flex items-center gap-3 bg-black/70 px-3 py-1.5 rounded-xl border border-white/10 text-xs">
+                                <i class="fa-solid fa-pause text-pink-400"></i>
+                                <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                    <div class="bg-pink-500 h-full w-2/5 animate-pulse"></div>
+                                </div>
+                                <span class="font-mono text-[10px] text-slate-300">04:12</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-heading font-bold text-white">${title}</h3>
+                            <p class="text-xs text-slate-300 mt-1 leading-relaxed">${desc}</p>
+                        </div>
+                        <button onclick="App.addStars(30); Toast.show('Selesai Menonton Episode! +30 Bintang 🌟'); SoundEngine.play('C6'); Modals.close();" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-bold text-white rounded-xl shadow-glow-pink">Tandai Selesai Menonton</button>
+                    </div>
+                `);
+            },
+            openActivity(act) {
+                SoundEngine.play('G5');
+                this.open(`
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-yellow-400 text-slate-950 flex items-center justify-center font-bold text-2xl shadow-glow-yellow">🧪</div>
+                            <div>
+                                <h3 class="text-xl font-heading font-bold text-white">Panduan Eksperimen Sains</h3>
+                                <p class="text-xs text-yellow-400 font-semibold">Sertifikasi Keamanan Rumah</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-slate-900/90 p-4 rounded-2xl text-xs space-y-2.5 border border-white/10">
+                            <div class="font-bold text-white text-sm">Bahan-Bahan Yang Dibutuhkan:</div>
+                            <ul class="list-disc list-inside text-slate-300 space-y-1">
+                                <li>Soda Kue (3 Sendok Makan)</li>
+                                <li>Cuka Makanan (1/2 Gelas)</li>
+                                <li>Pewarna Makanan Aman (Merah/Kuning)</li>
+                                <li>Botol Plastik Bekas atau Tanah Liat</li>
+                            </ul>
+                        </div>
+
+                        <button onclick="Toast.show('Disimpan ke Buku Catatan Sains! 📝'); SoundEngine.play('C6'); Modals.close();" class="w-full py-3 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-heading font-bold rounded-xl shadow-glow-yellow">Simpan Panduan Eksperimen</button>
+                    </div>
+                `);
+            },
+            openChallenges() {
+                this.open(`
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-heading font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-trophy text-yellow-400"></i> Misi Mingguan Kamu
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex items-center justify-between text-xs">
+                                <span class="text-white font-semibold">1. Selesaikan 1 Game Misi Matematika</span>
+                                <span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check"></i> Selesai</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex items-center justify-between text-xs">
+                                <span class="text-white font-semibold">2. Tonton 1 Episode Kartun Animasi</span>
+                                <span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check"></i> Selesai</span>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex items-center justify-between text-xs">
+                                <span class="text-white font-semibold">3. Buka Panduan Eksperimen STEM</span>
+                                <button onclick="App.claimBadge();" class="px-3 py-1.5 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-bold rounded-lg shadow-glow-yellow">Klaim Lencana</button>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            },
+            openParentsPanel() {
+                this.open(`
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-heading font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield text-cyan-400"></i> Panel Kontrol Orang Tua
+                        </h3>
+                        
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Galaxy Quest menjamin lingkungan belajar 100% bebas iklan, terenkripsi, dan sesuai standar pendidikan internasional.
+                        </p>
+
+                        <div class="p-4 bg-slate-900 rounded-2xl border border-cyan-500/30 space-y-3">
+                            <div class="flex items-center justify-between text-xs text-white">
+                                <span>Batas Waktu Layar Harian</span>
+                                <span class="text-cyan-400 font-bold">45 Menit</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-white">
+                                <span>Proteksi Konten Anak</span>
+                                <span class="text-emerald-400 font-bold"><i class="fa-solid fa-shield"></i> Aktif</span>
+                            </div>
+                        </div>
+
+                        <button onclick="Toast.show('Pengaturan Orang Tua Disimpan! 🛡️'); Modals.close();" class="w-full py-3 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-heading font-bold rounded-xl shadow-glow-cyan">Simpan Pengaturan</button>
+                    </div>
+                `);
+            },
+            openSearch() {
+                this.open(`
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <input type="text" id="searchInput" onkeyup="if(event.key==='Enter'){ Toast.show('Pencarian dimuat!', 'fa-magnifying-glass'); Modals.close(); }" placeholder="Cari game, kartun, atau sains..." class="w-full py-3 pl-10 pr-4 bg-slate-900 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-yellow-400 text-sm">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                        </div>
+                        <div class="text-xs text-slate-400">Rekomendasi: Matematika, Gunung Berapi, Karakter Nova, Planet</div>
+                    </div>
+                `);
+            },
+            openLogin() {
+                this.open(`
+                    <div class="space-y-4 text-center">
+                        <div class="w-14 h-14 rounded-full bg-yellow-400 text-slate-950 flex items-center justify-center text-2xl font-bold mx-auto shadow-glow-yellow">
+                            🚀
+                        </div>
+                        <h3 class="text-2xl font-heading font-bold text-white">Masuk Penjelajah</h3>
+                        <p class="text-xs text-slate-300">Masukkan Pin Paspor Kadet untuk sinkronisasi Bintang!</p>
+                        
+                        <input type="password" value="1234" class="w-full py-3 px-4 bg-slate-900 border border-white/20 rounded-xl text-center text-white font-mono tracking-widest text-lg focus:outline-none focus:border-yellow-400">
+
+                        <button onclick="SoundEngine.play('C6'); Toast.show('Selamat datang kembali, Kapten Kadet! 🌌'); Modals.close();" class="w-full py-3 bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 font-heading font-bold rounded-xl shadow-glow-yellow">Meluncur</button>
+                    </div>
+                `);
+            },
+            openTrailer() {
+                this.playCartoon('Trailer Resmi Musim 2 Galaxy Quest', '01:30', 'Tonton tontonan perdana petualangan luar angkasa musim terbaru!');
+            },
+            openRewards() {
+                SoundEngine.play('C6');
+                this.open(`
+                    <div class="space-y-4 text-center">
+                        <div class="w-16 h-16 rounded-full bg-yellow-400/20 border border-yellow-400 text-yellow-400 text-3xl flex items-center justify-center mx-auto shadow-glow-yellow">
+                            ⭐
+                        </div>
+                        <h3 class="text-2xl font-heading font-bold text-white">Koleksi Bintang Kamu</h3>
+                        <div class="p-4 bg-slate-900 rounded-2xl border border-white/10 text-xs space-y-2">
+                            <div class="text-slate-300">Total Bintang Terkumpul</div>
+                            <div class="text-4xl font-heading font-bold text-yellow-400">${AppState.stars.toLocaleString()} 🌟</div>
+                            <div class="text-[10px] text-emerald-400">Peringkat: Kapten Kadet Tingkat 4</div>
+                        </div>
+                        <button onclick="Modals.close()" class="w-full py-3 bg-yellow-400 text-slate-950 font-heading font-bold rounded-xl shadow-glow-yellow">Lanjutkan Belajar</button>
+                    </div>
+                `);
+            }
+        };
+
+        /**
+         * GAME MINI LOGIKA
+         */
+        const Games = {
+            launch(type) {
+                SoundEngine.play('E5');
+                if (type === 'math') this.startMathGame();
+                else if (type === 'alien') this.startMemoryGame();
+                else if (type === 'planet') this.startPlanetBuilder();
+                else if (type === 'racer') this.startSpaceRacer();
+            },
+            startMathGame() {
+                const a = Math.floor(Math.random() * 8) + 3;
+                const b = Math.floor(Math.random() * 8) + 3;
+                AppState.currentMathAns = a * b;
+
+                const options = [
+                    AppState.currentMathAns,
+                    AppState.currentMathAns + 4,
+                    AppState.currentMathAns - 6,
+                    AppState.currentMathAns + 10
+                ].sort(() => Math.random() - 0.5);
+
+                Modals.open(`
+                    <div class="text-center space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-yellow-400 text-slate-950 text-3xl flex items-center justify-center mx-auto shadow-glow-yellow">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <h3 class="text-2xl font-heading font-bold text-white">Tantangan Misi Matematika</h3>
+                        <p class="text-xs text-slate-300">Selesaikan perkalian untuk meluncurkan roket!</p>
+                        
+                        <div class="bg-slate-900 p-6 rounded-2xl border border-yellow-400/40 my-4 shadow-inner">
+                            <div class="text-4xl font-heading font-bold text-yellow-400 mb-4 tracking-wider">${a} &times; ${b} = ?</div>
+                            <div class="grid grid-cols-2 gap-3">
+                                ${options.map(opt => `
+                                    <button onclick="Games.checkMath(${opt})" class="py-3 bg-white/10 hover:bg-yellow-400 hover:text-slate-950 rounded-xl text-xl font-bold text-white transition-all transform hover:scale-105 active:scale-95 border border-white/10">${opt}</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `);
+            },
+            checkMath(ans) {
+                if (ans === AppState.currentMathAns) {
+                    SoundEngine.play('C6');
+                    App.addStars(50);
+                    Toast.show('Benar! Roket Berhasil Meluncur! 🚀 +50 Bintang');
+                    Modals.close();
+                } else {
+                    SoundEngine.play('C4');
+                    Toast.show('Jawaban belum tepat, coba lagi ya!', 'fa-circle-xmark');
+                }
+            },
+            startMemoryGame() {
+                const cards = ['👽', '👾', '🚀', '👽', '👾', '🚀'].sort(() => Math.random() - 0.5);
+                AppState.memoryGameState = { cards, flipped: [], matched: 0 };
+
+                Modals.open(`
+                    <div class="text-center space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-emerald-400 text-slate-900 text-3xl flex items-center justify-center mx-auto shadow-glow-emerald">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3 class="text-2xl font-heading font-bold text-white">Cari Pasangan Alien</h3>
+                        <p class="text-xs text-slate-300">Temukan 3 pasang kartu yang cocok!</p>
+                        
+                        <div class="grid grid-cols-3 gap-3 my-4">
+                            ${cards.map((icon, idx) => `
+                                <button id="card-${idx}" onclick="Games.flipCard(${idx}, '${icon}')" class="h-20 bg-slate-900 border border-emerald-500/40 rounded-2xl text-3xl hover:border-emerald-400 transition-all flex items-center justify-center font-bold text-transparent">
+                                    ?
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `);
+            },
+            flipCard(idx, icon) {
+                const state = AppState.memoryGameState;
+                const btn = document.getElementById(`card-${idx}`);
+                if (!btn || state.flipped.length >= 2 || btn.dataset.flipped === 'true') return;
+
+                SoundEngine.play('E5');
+                btn.innerText = icon;
+                btn.classList.remove('text-transparent');
+                btn.classList.add('text-white', 'bg-emerald-950/80');
+                btn.dataset.flipped = 'true';
+                state.flipped.push({ idx, icon, btn });
+
+                if (state.flipped.length === 2) {
+                    const [c1, c2] = state.flipped;
+                    if (c1.icon === c2.icon) {
+                        SoundEngine.play('G5');
+                        state.matched += 1;
+                        state.flipped = [];
+                        if (state.matched === 3) {
+                            setTimeout(() => {
+                                SoundEngine.play('C6');
+                                App.addStars(60);
+                                Toast.show('Semua Pasangan Ditemukan! 🎉 +60 Bintang', 'fa-award');
+                                Modals.close();
+                            }, 500);
+                        }
+                    } else {
+                        setTimeout(() => {
+                            c1.btn.innerText = '?';
+                            c1.btn.classList.add('text-transparent');
+                            c1.btn.classList.remove('bg-emerald-950/80');
+                            delete c1.btn.dataset.flipped;
+
+                            c2.btn.innerText = '?';
+                            c2.btn.classList.add('text-transparent');
+                            c2.btn.classList.remove('bg-emerald-950/80');
+                            delete c2.btn.dataset.flipped;
+
+                            state.flipped = [];
+                        }, 800);
+                    }
+                }
+            },
+            startPlanetBuilder() {
+                Modals.open(`
+                    <div class="text-center space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-cyan-400 text-slate-950 text-3xl flex items-center justify-center mx-auto shadow-glow-cyan">
+                            <i class="fa-solid fa-earth-americas"></i>
+                        </div>
+                        <h3 class="text-2xl font-heading font-bold text-white">Desain Planet Alien</h3>
+                        <p class="text-xs text-slate-300">Pilih elemen lingkungan untuk planet barumu!</p>
+                        
+                        <div id="planetPreview" class="w-32 h-32 rounded-full bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-900 mx-auto border-4 border-cyan-300/40 shadow-glow-cyan flex items-center justify-center text-3xl transition-all duration-500">
+                            🌋
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 my-4">
+                            <button onclick="Games.setPlanetElement('🌋', 'from-amber-500 via-red-600 to-yellow-900')" class="py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold text-white">Gunung Api</button>
+                            <button onclick="Games.setPlanetElement('🌊', 'from-cyan-400 via-blue-600 to-teal-900')" class="py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold text-white">Lautan Esp</button>
+                            <button onclick="Games.setPlanetElement('🌿', 'from-emerald-400 via-green-600 to-lime-900')" class="py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold text-white">Hutan Alien</button>
+                        </div>
+
+                        <button onclick="Toast.show('Planet Baru Didaftarkan di Peta Galaksi! 🪐'); SoundEngine.play('C6'); Modals.close();" class="w-full py-3 bg-gradient-to-r from-cyan-400 to-blue-500 font-heading font-bold text-slate-950 rounded-xl shadow-glow-cyan">Simpan Karya Planet</button>
+                    </div>
+                `);
+            },
+            setPlanetElement(emoji, bgGradient) {
+                SoundEngine.play('A5');
+                const preview = document.getElementById('planetPreview');
+                if (preview) {
+                    preview.innerText = emoji;
+                    preview.className = `w-32 h-32 rounded-full bg-gradient-to-tr ${bgGradient} mx-auto border-4 border-cyan-300/40 shadow-glow-cyan flex items-center justify-center text-3xl transition-all duration-500 transform scale-105`;
+                }
+            },
+            startSpaceRacer() {
+                Modals.open(`
+                    <div class="text-center space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-pink-500 text-white text-3xl flex items-center justify-center mx-auto shadow-glow-pink">
+                            <i class="fa-solid fa-shuttle-space"></i>
+                        </div>
+                        <h3 class="text-2xl font-heading font-bold text-white">Simulasi Balap Kosmik</h3>
+                        <p class="text-xs text-slate-300">Pacu kecepatan dan kumpulkan kristal energi!</p>
+                        
+                        <div class="relative w-full h-40 bg-slate-950 rounded-2xl border border-pink-500/40 flex flex-col items-center justify-center p-4 overflow-hidden">
+                            <div class="text-4xl animate-bounce mb-2">🚀</div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-pink-500 to-yellow-400 h-full w-3/4 animate-pulse"></div>
+                            </div>
+                            <div class="text-[11px] font-mono text-cyan-400 mt-2">Kecepatan: 4.500 km/detik | Mesin Warp Aktif</div>
+                        </div>
+
+                        <button onclick="App.addStars(100); Toast.show('Rekor Kecepatan Dipecahkan! +100 Bintang 🌟'); SoundEngine.play('C6'); Modals.close();" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-heading font-bold text-white rounded-xl shadow-glow-pink">Pacu Kecepatan Maksimal</button>
+                    </div>
+                `);
+            }
+        };
+
+        /**
+         * INTERAKSI TIM KRU
+         */
+        const Crew = {
+            bios: {
+                'Nova': 'Nova sangat suka navigasi galaksi, peta ruang angkasa, dan membantu kadet memecahkan teka-teki matematika!',
+                'Ziggy': 'Ziggy adalah robot AI pintar yang sanggup menghitung 1 juta fakta sains per detik!',
+                'Luna': 'Luna memimpin berbagai eksperimen reaksi kimia aman di laboratorium stasiun luar angkasa.',
+                'Orbit': 'Orbit adalah alien ramah dari Galaksi Andromeda yang menguasai 500 bahasa antar-bintang!',
+                'Comet': 'Comet adalah pilot tercepat yang memegang rekor lintasan komet galaksi!'
+            },
+            showBio(name) {
+                SoundEngine.play('A5');
+                const quoteEl = document.getElementById('crewQuote');
+                if (quoteEl) {
+                    quoteEl.innerHTML = `<span>👨‍🚀 <strong class="text-white">${name}:</strong> "${this.bios[name]}"</span>`;
+                }
+                Toast.show(`Terhubung dengan Kadet ${name}! 🛸`, 'fa-user-astronaut');
+            }
+        };
+
+        /**
+         * FUNGSI UTAMA APLIKASI
+         */
+        const App = {
+            addStars(amount) {
+                AppState.stars += amount;
+                const starEl = document.getElementById('headerStars');
+                if (starEl) starEl.innerText = AppState.stars.toLocaleString();
+            },
+            claimBadge() {
+                SoundEngine.play('C6');
+                Toast.show('Lencana Misi Diklaim! 🏆 +100 Bintang');
+                this.addStars(100);
+                const goalText = document.getElementById('challengeGoalText');
+                const bar = document.getElementById('challengeProgressBar');
+                if (goalText) goalText.innerText = '3 / 3 Selesai!';
+                if (bar) bar.style.width = '100%';
+                Modals.close();
+            },
+            download(platform) {
+                Toast.show(`Mengalihkan ke toko aplikasi ${platform === 'ios' ? 'Apple App Store' : 'Google Play Store'}...`, 'fa-download');
+            }
+        };
+
+        /**
+         * ANIMASI KANVAS BINTANG (STARFIELD)
+         */
+        const Starfield = {
+            canvas: document.getElementById('starfield'),
+            ctx: null,
+            stars: [],
+            init() {
+                if (!this.canvas) return;
+                this.ctx = this.canvas.getContext('2d');
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.animate();
+            },
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.createStars();
+            },
+            createStars() {
+                this.stars = [];
+                const count = Math.floor((this.canvas.width * this.canvas.height) / 2800);
+                for (let i = 0; i < count; i++) {
+                    this.stars.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        radius: Math.random() * 1.8 + 0.4,
+                        alpha: Math.random(),
+                        speed: Math.random() * 0.015 + 0.005,
+                        color: Math.random() > 0.8 ? '#fbc531' : (Math.random() > 0.6 ? '#00cec9' : '#ffffff')
+                    });
+                }
+            },
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.stars.forEach(star => {
+                    star.alpha += star.speed;
+                    if (star.alpha > 1 || star.alpha < 0) {
+                        star.speed = -star.speed;
+                    }
+                    this.ctx.beginPath();
+                    this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = star.color;
+                    this.ctx.globalAlpha = Math.abs(star.alpha);
+                    this.ctx.fill();
+                });
+                requestAnimationFrame(() => this.animate());
+            }
+        };
+
+        // Inisialisasi saat dokumen selesai dimuat
+        window.addEventListener('DOMContentLoaded', () => {
+            Starfield.init();
+            
+            // Listener Tombol Escape untuk Menutup Modal
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') Modals.close();
+            });
+        });
+    </script>
+</body>
+</html>
